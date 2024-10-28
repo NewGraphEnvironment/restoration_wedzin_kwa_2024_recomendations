@@ -35,17 +35,17 @@ ui <- page_fluid(
       )
     ),
     div(style = "padding: 15px;",
-        p("Click in the USERINPUT column to add your priority ratings (1-5)"),
-        DTOutput("table", width = "100%")
+        p("Click in the USERINPUT column to add your priority ratings (any positive number)"),
+        DTOutput("table", width = "100%"),
+        # Add a div for showing validation messages
+        div(id = "validation_message", style = "color: red; margin-top: 10px;")
     )
   )
 )
 
 server <- function(input, output, session) {
-  # Reactive value to store the current state of the data
   rv <- reactiveVal(initial_data)
 
-  # Create the interactive table
   output$table <- renderDT({
     datatable(
       rv(),
@@ -84,30 +84,32 @@ server <- function(input, output, session) {
       )
   }, server = FALSE)
 
-  # Handle cell edits
+  # Handle cell edits with improved validation feedback
   observeEvent(input$table_cell_edit, {
     info <- input$table_cell_edit
     current_data <- rv()
 
     # Convert input to numeric and validate
     new_value <- suppressWarnings(as.numeric(info$value))
-    if (!is.na(new_value) && new_value >= 1 && new_value <= 5) {
-      current_data$USERINPUT[info$row] <- new_value  # Using numeric value
+
+    if (is.na(new_value)) {
+      # Show error for non-numeric input
+      runjs("document.getElementById('validation_message').innerHTML = 'Please enter a valid number.'")
+    } else if (new_value <= 0) {
+      # Show error for negative or zero input
+      runjs("document.getElementById('validation_message').innerHTML = 'Please enter a positive number.'")
+    } else {
+      # Valid input: update data and clear message
+      current_data$USERINPUT[info$row] <- new_value
       rv(current_data)
+      runjs("document.getElementById('validation_message').innerHTML = ''")
     }
   })
 
-  # Handle sort button click
   observeEvent(input$sort_btn, {
     current_data <- rv()
-
-    # Create an index for sorting
     idx <- order(is.na(current_data$USERINPUT), current_data$USERINPUT)
-
-    # Sort the data frame using the index
     sorted_data <- current_data[idx, ]
-
-    # Update the reactive value with sorted data
     rv(sorted_data)
   })
 }
