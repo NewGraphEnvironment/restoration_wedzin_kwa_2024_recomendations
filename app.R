@@ -23,17 +23,19 @@ initial_data <- tribble(
   NA, "High Fisheries Value Areas", "Spatially delineate areas of high fisheries values based on known spawning and rearing habitat for fish species of interest. Where data gaps exist, develop study plans to understand where this high-value habitat is and quantify its value for fish species of interest through standardized methodologies such as Fish and Fish Habitat Assessment Procedures [@johnstonFishHabitatAssessment1996]. For known spawning and rearing locations, load reviewed data into `bcfishpass` using the `user_habitat_classification.csv` file located [here](https://github.com/smnorris/bcfishpass/blob/main/data/user_habitat_classification.csv) so it can be pulled into the collaborative GIS project and queried to facilitate priority ranking of areas of high fisheries values."
 )
 
-ui <- page_sidebar(
+ui <- page_fluid(
   theme = bs_theme(),
   title = "Priority Rating Tool",
-  sidebar = card(
-    actionButton("sort_btn", "Sort by Priority Rating", class = "btn-primary")
-  ),
 
   card(
-    card_header("Interactive Priority Table - TO BE SIMPLIFIED SOON!!"),
+    card_header(
+      div(style = "display: flex; justify-content: space-between; align-items: center;",
+          span("Interactive Priority Table"),
+          actionButton("sort_btn", "Sort by Priority Rating", class = "btn-sm btn-primary")
+      )
+    ),
     div(style = "padding: 15px;",
-        p("Click in the USERINPUT column to add your priority ratings"),
+        p("Click in the USERINPUT column to add your priority ratings (1-5)"),
         DTOutput("table", width = "100%")
     )
   )
