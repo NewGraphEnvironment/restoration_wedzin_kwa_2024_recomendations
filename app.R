@@ -29,7 +29,7 @@ ui <- page_fluid(
   tags$head(
     tags$style(HTML("
       .dataTables_wrapper {
-        font-size: 12px;
+        font-size: 11px;
       }
     "))
   ),
