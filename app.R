@@ -30,7 +30,7 @@ ui <- page_fluid(
   card(
     card_header(
       div(style = "display: flex; justify-content: space-between; align-items: center;",
-          span("Interactive Priority Table"),
+          span("Interactive Priority Table - TO BE SIMPLIFIED SOON!!!!"),
           actionButton("sort_btn", "Sort by Priority Rating", class = "btn-sm btn-primary")
       )
     ),
