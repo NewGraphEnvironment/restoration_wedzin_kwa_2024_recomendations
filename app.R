@@ -26,13 +26,6 @@ initial_data <- tribble(
 ui <- page_fluid(
   theme = bs_theme(),
   title = "Priority Rating Tool",
-  tags$head(
-    tags$style(HTML("
-      .dataTables_wrapper {
-        font-size: 11px;
-      }
-    "))
-  ),
 
   card(
     card_header(
@@ -67,6 +60,9 @@ server <- function(input, output, session) {
         pageLength = 15,
         dom = 't',
         ordering = FALSE,
+        initComplete = JS("function(settings, json) {
+          $(this.api().table().container()).css({'font-size': '12px'});
+        }"),
         columnDefs = list(
           list(
             targets = 0,
