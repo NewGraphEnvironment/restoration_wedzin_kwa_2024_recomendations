@@ -25,14 +25,15 @@ initial_data <- tribble(
 
 ui <- page_sidebar(
   theme = bs_theme(),
+  title = "Priority Rating Tool",
   sidebar = card(
     actionButton("sort_btn", "Sort by Priority Rating", class = "btn-primary")
   ),
 
   card(
-    card_header("Priority Ranking Table - to be simplified soon!"),
+    card_header("Interactive Priority Table - TO BE SIMPLIFIED SOON!!"),
     div(style = "padding: 15px;",
-        p("Click in the USERINPUT column to add your priority ratings (1-15)"),
+        p("Click in the USERINPUT column to add your priority ratings"),
         DTOutput("table", width = "100%")
     )
   )
@@ -48,23 +49,23 @@ server <- function(input, output, session) {
       rv(),
       selection = 'none',
       rownames = FALSE,
-      escape = FALSE,  # This allows HTML in the table
+      escape = FALSE,
       editable = list(
         target = "cell",
-        disable = list(columns = c(1, 2))  # Make only USERINPUT column editable
+        disable = list(columns = c(1, 2))
       ),
       options = list(
         pageLength = 15,
-        dom = 't',  # Show only the table without other controls
-        ordering = FALSE,  # Disable default sorting
+        dom = 't',
+        ordering = FALSE,
         columnDefs = list(
           list(
-            targets = 0,  # USERINPUT column
+            targets = 0,
             createdCell = JS("function(td, cellData, rowData, row, col) {
               $(td).css('background-color', '#f0f8ff');
               $(td).css('cursor', 'pointer');
               $(td).css('font-weight', 'bold');
-              if(cellData === null || cellData === '') {
+              if(cellData === null || cellData === '' || cellData === 'NA') {
                 $(td).html('Click to rate!');
                 $(td).css('color', '#666');
                 $(td).css('font-style', 'italic');
@@ -79,28 +80,33 @@ server <- function(input, output, session) {
         backgroundColor = 'white',
         color = 'black'
       )
-  }, server = FALSE)  # Use client-side processing
+  }, server = FALSE)
 
   # Handle cell edits
   observeEvent(input$table_cell_edit, {
     info <- input$table_cell_edit
     current_data <- rv()
-    # Validate input to be between 1 and 5
-    new_value <- min(max(as.numeric(info$value), 1), 5)
-    if (!is.na(new_value)) {
-      current_data[info$row, info$col] <- new_value
+
+    # Convert input to numeric and validate
+    new_value <- suppressWarnings(as.numeric(info$value))
+    if (!is.na(new_value) && new_value >= 1 && new_value <= 5) {
+      current_data$USERINPUT[info$row] <- new_value  # Using numeric value
       rv(current_data)
     }
   })
 
-  # Handle sort button click - now always sorts ascending
+  # Handle sort button click
   observeEvent(input$sort_btn, {
     current_data <- rv()
-    # Only sort if there are valid ratings
-    if (!all(is.na(current_data$USERINPUT))) {
-      sorted_data <- current_data[order(current_data$USERINPUT), ]  # ascending order
-      rv(sorted_data)
-    }
+
+    # Create an index for sorting
+    idx <- order(is.na(current_data$USERINPUT), current_data$USERINPUT)
+
+    # Sort the data frame using the index
+    sorted_data <- current_data[idx, ]
+
+    # Update the reactive value with sorted data
+    rv(sorted_data)
   })
 }
 
