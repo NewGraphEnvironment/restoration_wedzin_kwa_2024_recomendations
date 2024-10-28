@@ -26,6 +26,13 @@ initial_data <- tribble(
 ui <- page_fluid(
   theme = bs_theme(),
   title = "Priority Rating Tool",
+  tags$head(
+    tags$style(HTML("
+      .dataTables_wrapper {
+        font-size: 12px;
+      }
+    "))
+  ),
 
   card(
     card_header(
