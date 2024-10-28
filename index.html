@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shinylive App</title>
+    <script src="https://shinylive.io/js/shinylive.js"></script>
+    <link rel="stylesheet" href="https://shinylive.io/css/shinylive.css">
+</head>
+<body>
+    <div id="shinylive-app"></div>
+    <script>
+        shinylive.then(function(shinylive) {
+            shinylive.launch("#shinylive-app", {
+                mode: "iframe",
+                height: "600px"
+            });
+        });
+    </script>
+</body>
+</html>
