@@ -11,19 +11,20 @@ library(DT)
 #
 
 # use the csv vs the tribble
-data_raw <- readr::read_csv(
-  "recommendations_raw.csv"
-)
-
-data_clean <- xciter::xct_keys_to_inline_table_col(
-  data_raw,
-  col_format = "Details")
-
-# temporary hack to avoid use of ngr in webassembly.  burn out a csv object then just read it in for shiny live
-data_clean |>
-  readr::write_csv(
-    file = 'recommendations.csv'
-  )
+# data_raw <- readr::read_csv(
+#
+#   "recommendations_raw.csv"
+# )
+#
+# data_clean <- xciter::xct_keys_to_inline_table_col(
+#   data_raw,
+#   col_format = "Details")
+#
+# # temporary hack to avoid use of ngr in webassembly.  burn out a csv object then just read it in for shiny live
+# data_clean |>
+#   readr::write_csv(
+#     file = 'recommendations.csv'
+#   )
 
 data_clean <- readr::read_csv('recommendations.csv')
 
