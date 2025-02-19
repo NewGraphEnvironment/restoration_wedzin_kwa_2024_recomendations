@@ -3,14 +3,16 @@ library(bslib)
 library(DT)
 # library(readr)
 
+
+# looks like the export from zotero is now breaking our xciter::xct_keys_to_inline_table_col function. not sure why - added last
+# citation by hand.... Need to look into it
 # httr::GET(
 #   url = "https://raw.githubusercontent.com/NewGraphEnvironment/new_graphiti/main/assets/NewGraphEnvironment.bib",
 #   httr::write_disk("references.bib", overwrite = TRUE)
 # )
-#
-#
 
-# use the csv vs the tribble
+
+# # use the csv vs the tribble
 # data_raw <- readr::read_csv(
 #
 #   "recommendations_raw.csv"
@@ -36,12 +38,12 @@ ui <- page_fluid(
   card(
     card_header(
       div(style = "display: flex; justify-content: space-between; align-items: center;",
-          span("Interactive Priority Table - TO BE SIMPLIFIED SOON!!!!"),
+          span("Interactive Priority Table"),
           actionButton("sort_btn", "Sort by Priority Rating", class = "btn-sm btn-primary")
       )
     ),
     div(style = "padding: 15px;",
-        p("Click in the USERINPUT column to add your priority ratings (any positive number)"),
+        p("Click in the USERINPUT column to add your priority ratings (any positive number - could be a $$DOLLAR amount)"),
         DTOutput("table", width = "100%"),
         # Add a div for showing validation messages
         div(id = "validation_message", style = "color: red; margin-top: 10px;")
