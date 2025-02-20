@@ -18,9 +18,16 @@ library(DT)
 #   "recommendations_raw.csv"
 # )
 #
+# # use the xciter bib file (maek sure it is updated though)
+# path_bib <- system.file("extdata", "NewGraphEnvironment.bib", package = "xciter")
+#
+#
 # data_clean <- xciter::xct_keys_to_inline_table_col(
 #   data_raw,
-#   col_format = "Details")
+#   # testing this for now
+#   path_bib = path_bib,
+#   col_format = "Details"
+#   )
 #
 # # temporary hack to avoid use of ngr in webassembly.  burn out a csv object then just read it in for shiny live
 # data_clean |>
