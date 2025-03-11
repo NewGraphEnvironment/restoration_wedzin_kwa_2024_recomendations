@@ -16,7 +16,7 @@ To view locally:
     servr::httd("docs")
     
     
-seems this doesn't want to work anymore
+To view in new window:
 
     httpuv::runStaticServer("docs")
 
